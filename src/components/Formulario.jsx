@@ -123,7 +123,7 @@ export default function Formulario() {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const apiUrl = 'https://api-fcmotos.t8sftf.easypanel.host/api/candidatos'; 
+   const apiUrl = `${import.meta.env.VITE_API_URL}/api/candidatos`;; 
       await axios.post(apiUrl, formData);
       setEnviado(true);
     } catch (error) {
