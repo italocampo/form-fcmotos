@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion as Motion, AnimatePresence } from "framer-motion";
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 
 export default function Formulario() {
@@ -99,10 +99,7 @@ export default function Formulario() {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  // --- CORREÇÃO AQUI ---
   const handleNext = (valorManual) => {
-    // Se o valor vier direto do clique (valorManual), usamos ele. 
-    // Se for undefined ou evento de mouse, pegamos do estado.
     const valorParaChecar = (typeof valorManual === 'string') 
       ? valorManual 
       : formData[currentQ.field];
@@ -118,7 +115,6 @@ export default function Formulario() {
       handleSubmit();
     }
   };
-  // ---------------------
 
   const handleBack = () => {
     if (step > 0) setStep(step - 1);
@@ -158,7 +154,8 @@ export default function Formulario() {
           <span>{Math.round(progress)}%</span>
         </div>
         <div className="h-1.5 w-full bg-fc-input rounded-full overflow-hidden">
-          <motion.div 
+          {/* Atualizado para Motion (Maiúsculo) */}
+          <Motion.div 
             className="h-full bg-fc-orange"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
@@ -168,7 +165,8 @@ export default function Formulario() {
       </div>
 
       <AnimatePresence mode="wait">
-        <motion.div
+        {/* Atualizado para Motion (Maiúsculo) */}
+        <Motion.div
           key={step}
           initial={{ x: 20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
@@ -202,7 +200,6 @@ export default function Formulario() {
                   key={option}
                   onClick={() => {
                     handleChange(currentQ.field, option);
-                    // AQUI ESTÁ O TRUQUE: Passamos o 'option' direto pra validar sem esperar o state
                     if(!currentQ.hasSubQuestion) setTimeout(() => handleNext(option), 200);
                   }}
                   className={`p-4 rounded-lg border cursor-pointer transition-all flex items-center gap-3
@@ -221,7 +218,8 @@ export default function Formulario() {
           )}
 
           {currentQ.hasSubQuestion && formData[currentQ.field] === 'Sim' && (
-            <motion.div 
+            /* Atualizado para Motion (Maiúsculo) */
+            <Motion.div 
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               className="mt-4 pt-4 border-t border-gray-800"
@@ -234,9 +232,9 @@ export default function Formulario() {
                 value={formData[currentQ.subField] || ''}
                 onChange={(e) => handleChange(currentQ.subField, e.target.value)}
               />
-            </motion.div>
+            </Motion.div>
           )}
-        </motion.div>
+        </Motion.div>
       </AnimatePresence>
 
       <div className="flex gap-4 mt-12 pt-6 border-t border-gray-800/50">
