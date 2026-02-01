@@ -11,9 +11,10 @@ function Home() {
     <div className="w-full max-w-5xl flex flex-col items-center animate-fade-in">
       
       {/* Título Principal */}
-      <h1 className="text-4xl md:text-6xl font-extrabold text-center mb-10 leading-tight">
-        SEJA MEU SÓCIO EM UMA NOVA UNIDADE DA FC MOTOS
-      </h1>
+      {/* Título Principal */}
+<h1 className="text-3xl md:text-6xl font-extrabold text-center mb-10 leading-tight">
+  SEJA MEU SÓCIO EM UMA NOVA UNIDADE DA <span className="text-orange-600 whitespace-nowrap">FC MOTOS</span>
+</h1>
 
       {/* Grid de Estatísticas */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mb-8">
@@ -52,9 +53,9 @@ function Home() {
 
       {/* Caixa de Aviso */}
       <div className="w-full bg-[#1a1510] border border-orange-600/50 rounded-lg p-4 flex items-start gap-3 mb-8">
-        <span className="text-red-500 text-xl mt-1">⛔</span>
+        <span className="text-red-500 text-xl mt-1">📈</span>
         <p className="text-gray-300 text-sm md:text-base">
-          📈 Exclusivo para quem quer <span className="text-white font-bold">abrir e operar</span> no dia a dia
+           Exclusivo para quem quer <span className="text-white font-bold">abrir e operar</span> no dia a dia
         </p>
       </div>
 
