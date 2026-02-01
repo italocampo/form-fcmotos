@@ -1,6 +1,7 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Formulario from './components/Formulario';
-import React from 'react';
+import Dashboard from './Dashboard'; // <--- Importamos o Dashboard aqui
 
 // --- Componente da Página Inicial (Landing Page) ---
 function Home() {
@@ -36,8 +37,7 @@ function Home() {
           <span className="text-3xl">🔁 </span>
           <div>
             <p className="font-bold text-lg">Payback entre 12 a 15 meses</p>
-            <p className="text-gray-400 text-sm">Modelo de operação com retorno rápido sobre o investimento, baseado em resultados reais e escaláveis.
-</p>
+            <p className="text-gray-400 text-sm">Modelo de operação com retorno rápido sobre o investimento, baseado em resultados reais e escaláveis.</p>
           </div>
         </div>
 
@@ -79,21 +79,27 @@ function Home() {
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-[#0e0e0e] text-white flex flex-col items-center justify-center p-4 font-sans">
-        
         <Routes>
-          {/* Rota 1: Página Inicial */}
-          <Route path="/" element={<Home />} />
-          
-          {/* Rota 2: Formulário (com largura controlada para não esticar demais) */}
-          <Route path="/formulario" element={
-            <div className="w-full max-w-2xl animate-fade-in-up">
-              <Formulario />
+          {/* Rota 1: Página Inicial (Com Layout Centralizado) */}
+          <Route path="/" element={
+            <div className="min-h-screen bg-[#0e0e0e] text-white flex flex-col items-center justify-center p-4 font-sans">
+              <Home />
             </div>
           } />
-        </Routes>
+          
+          {/* Rota 2: Formulário (Com Layout Centralizado) */}
+          <Route path="/formulario" element={
+            <div className="min-h-screen bg-[#0e0e0e] text-white flex flex-col items-center justify-center p-4 font-sans">
+              <div className="w-full max-w-2xl animate-fade-in-up">
+                <Formulario />
+              </div>
+            </div>
+          } />
 
-      </div>
+          {/* Rota 3: Dashboard Administrativo (Layout Próprio) */}
+          <Route path="/dashboard-admin" element={<Dashboard />} />
+
+        </Routes>
     </Router>
   );
 }
