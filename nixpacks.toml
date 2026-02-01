@@ -1,11 +1,11 @@
-# Configura o ambiente com Node 20 (para não dar erro no Vite)
+# Configura o ambiente com Node 20
 [phases.setup]
 nixPkgs = ["nodejs_20", "npm-9_x"]
 
-# Instala e constrói o site
+# Instala (automático) e constrói o site
 [phases.build]
-cmds = ["npm ci", "npm run build"]
+cmds = ["npm run build"]
 
-# Inicia um servidor estático profissional apontando para a pasta 'dist'
+# Inicia o servidor estático na pasta dist
 [start]
 cmd = "npx serve -s dist -l 80"
