@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Formulario from './components/Formulario';
+import React from 'react';
 
 // --- Componente da Página Inicial (Landing Page) ---
 function Home() {

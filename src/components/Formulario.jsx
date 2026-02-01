@@ -1,11 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
+import React from 'react';
+
+// Substitua pelo link real do Instagram do seu cliente
+const INSTAGRAM_URL = "https://www.instagram.com/fabianoqs/"; 
 
 export default function Formulario() {
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [enviado, setEnviado] = useState(false);
+  const [redirecting, setRedirecting] = useState(false); 
 
   const [formData, setFormData] = useState({
     nome: '',
@@ -93,7 +98,17 @@ export default function Formulario() {
   ];
 
   const currentQ = questions[step];
-  const progress = ((step + 1) / questions.length) * 100;
+  const progress = (step / (questions.length - 1)) * 100;
+
+  // Efeito para redirecionar automaticamente
+  useEffect(() => {
+    if (redirecting) {
+      const timer = setTimeout(() => {
+        window.location.href = INSTAGRAM_URL;
+      }, 3000); // 3 segundos de espera
+      return () => clearTimeout(timer);
+    }
+  }, [redirecting]);
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -123,7 +138,7 @@ export default function Formulario() {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-   const apiUrl = `${import.meta.env.VITE_API_URL}/api/candidatos`;; 
+      const apiUrl = `${import.meta.env.VITE_API_URL}/api/candidatos`; 
       await axios.post(apiUrl, formData);
       setEnviado(true);
     } catch (error) {
@@ -134,18 +149,103 @@ export default function Formulario() {
     }
   };
 
-  if (enviado) {
+  // TELA DE REDIRECIONAMENTO (Estilo Instagram)
+  if (redirecting) {
     return (
-      <div className="text-center space-y-6 animate-fade-in">
-        <h2 className="text-3xl font-bold text-fc-orange">Obrigado!</h2>
-        <p className="text-gray-300">Seu formulário foi enviado com sucesso.</p>
-        <button onClick={() => window.location.reload()} className="text-fc-orange hover:text-white underline">
-          Voltar ao início
+      <div className="flex flex-col items-center justify-center text-center space-y-8 animate-fade-in py-12 min-h-[50vh]">
+        {/* Ícone Instagram SVG com Gradient */}
+        <div className="relative w-24 h-24">
+          <svg viewBox="0 0 24 24" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="instagramGradient" x1="2" y1="22" x2="22" y2="2" gradientUnits="userSpaceOnUse">
+                <stop stopColor="#f09433" />
+                <stop offset="0.25" stopColor="#e6683c" />
+                <stop offset="0.5" stopColor="#dc2743" />
+                <stop offset="0.75" stopColor="#cc2366" />
+                <stop offset="1" stopColor="#bc1888" />
+              </linearGradient>
+            </defs>
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0z" fill="url(#instagramGradient)"/>
+            <path d="M12 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4z" fill="url(#instagramGradient)"/>
+            <path d="M18.406 8.415a1.44 1.44 0 1 1 0-2.88 1.44 1.44 0 0 1 0 2.88z" fill="url(#instagramGradient)"/>
+          </svg>
+        </div>
+
+        <div className="space-y-2">
+          <h2 className="text-2xl font-bold text-white">
+            Redirecionando para o Instagram
+          </h2>
+          <p className="text-gray-400 max-w-md mx-auto">
+            Você será direcionado para o perfil do Fabiano Correia no Instagram em instantes...
+          </p>
+        </div>
+
+        {/* Dots Animation */}
+        <div className="flex gap-2 justify-center py-4">
+          <Motion.div 
+            className="w-3 h-3 bg-fc-orange rounded-full"
+            animate={{ opacity: [0.2, 1, 0.2] }}
+            transition={{ duration: 1, repeat: Infinity }}
+          />
+          <Motion.div 
+            className="w-3 h-3 bg-fc-orange rounded-full"
+            animate={{ opacity: [0.2, 1, 0.2] }}
+            transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
+          />
+          <Motion.div 
+            className="w-3 h-3 bg-fc-orange rounded-full"
+            animate={{ opacity: [0.2, 1, 0.2] }}
+            transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
+          />
+        </div>
+
+        <div className="text-sm space-y-4">
+          <p className="text-gray-500">Se não foi redirecionado automaticamente:</p>
+          <a 
+            href={INSTAGRAM_URL}
+            className="inline-flex items-center gap-2 text-fc-orange hover:text-white transition-colors font-semibold"
+          >
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+               <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069z"/>
+            </svg>
+            Clique aqui para abrir o Instagram
+          </a>
+        </div>
+
+        <button 
+          onClick={() => setRedirecting(false)} 
+          className="text-gray-600 hover:text-gray-400 text-sm mt-8 transition-colors"
+        >
+          ← Voltar ao formulário
         </button>
       </div>
     );
   }
 
+  // TELA DE SUCESSO (Obrigado)
+  if (enviado) {
+    return (
+      <div className="flex flex-col items-center justify-center text-center space-y-8 animate-fade-in py-12">
+        <div className="space-y-2">
+          <h2 className="text-2xl md:text-3xl font-bold text-white">
+            Obrigado por preencher.
+          </h2>
+          <h3 className="text-xl md:text-2xl font-bold text-white">
+            Seu perfil está sendo analisado.
+          </h3>
+        </div>
+
+        <button 
+          onClick={() => setRedirecting(true)} 
+          className="bg-fc-orange hover:bg-fc-orange-hover text-white font-bold py-3 px-16 rounded transition-all shadow-[0_0_15px_rgba(234,88,12,0.3)] hover:shadow-[0_0_25px_rgba(234,88,12,0.5)] uppercase tracking-wide"
+        >
+          Finalizar
+        </button>
+      </div>
+    );
+  }
+
+  // FORMULÁRIO PADRÃO
   return (
     <div className="w-full">
       <div className="mb-8">
@@ -154,7 +254,6 @@ export default function Formulario() {
           <span>{Math.round(progress)}%</span>
         </div>
         <div className="h-1.5 w-full bg-fc-input rounded-full overflow-hidden">
-          {/* Atualizado para Motion (Maiúsculo) */}
           <Motion.div 
             className="h-full bg-fc-orange"
             initial={{ width: 0 }}
@@ -165,7 +264,6 @@ export default function Formulario() {
       </div>
 
       <AnimatePresence mode="wait">
-        {/* Atualizado para Motion (Maiúsculo) */}
         <Motion.div
           key={step}
           initial={{ x: 20, opacity: 0 }}
@@ -185,7 +283,7 @@ export default function Formulario() {
             <input
               type="text"
               autoFocus
-              className="w-full bg-transparent border-b-2 border-fc-input text-white text-xl py-3 focus:border-fc-orange transition-colors placeholder-gray-600"
+              className="w-full bg-transparent border-b-2 border-fc-input text-white text-xl py-3 focus:border-fc-orange transition-colors placeholder-gray-600 caret-white outline-none"
               placeholder="Digite sua resposta..."
               value={formData[currentQ.field]}
               onChange={(e) => handleChange(currentQ.field, e.target.value)}
@@ -200,7 +298,6 @@ export default function Formulario() {
                   key={option}
                   onClick={() => {
                     handleChange(currentQ.field, option);
-                    if(!currentQ.hasSubQuestion) setTimeout(() => handleNext(option), 200);
                   }}
                   className={`p-4 rounded-lg border cursor-pointer transition-all flex items-center gap-3
                     ${formData[currentQ.field] === option 
@@ -218,7 +315,6 @@ export default function Formulario() {
           )}
 
           {currentQ.hasSubQuestion && formData[currentQ.field] === 'Sim' && (
-            /* Atualizado para Motion (Maiúsculo) */
             <Motion.div 
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
@@ -228,7 +324,7 @@ export default function Formulario() {
               <input
                 type="text"
                 autoFocus
-                className="w-full bg-fc-input rounded p-3 text-white focus:ring-1 focus:ring-fc-orange"
+                className="w-full bg-fc-input rounded p-3 text-white focus:ring-1 focus:ring-fc-orange caret-white outline-none"
                 value={formData[currentQ.subField] || ''}
                 onChange={(e) => handleChange(currentQ.subField, e.target.value)}
               />

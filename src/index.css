@@ -2,18 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Garante o fundo escuro em toda a tela */
+/* Seus ajustes globais */
 body {
   background-color: #0f0f10;
   color: #ffffff;
   font-family: 'Inter', sans-serif;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
-
-/* Remove a borda azul padrão ao clicar em inputs */
-input:focus, textarea:focus {
-  outline: none;
-  border-color: #ea580c;
 }
