@@ -7,28 +7,44 @@ import React from 'react';
 const INSTAGRAM_URL = "https://www.instagram.com/fabianoqs/"; 
 
 export default function Formulario() {
-  const [step, setStep] = useState(0);
+  // --- 1. RECUPERA O PASSO SALVO (OU COMEÇA DO 0) ---
+  const [step, setStep] = useState(() => {
+    const savedStep = localStorage.getItem('form_fcmotos_step');
+    return savedStep ? parseInt(savedStep, 10) : 0;
+  });
+
   const [loading, setLoading] = useState(false);
   const [enviado, setEnviado] = useState(false);
   const [redirecting, setRedirecting] = useState(false); 
 
-  const [formData, setFormData] = useState({
-    nome: '',
-    cidade_bairro: '',
-    idade: '',
-    instagram: '',
-    tem_outros_negocios: '',
-    quais_negocios: '',
-    atuacao_negocio: '',
-    valor_investimento: '',
-    restricao_cpf: '',
-    disponivel_contrato: '',
-    tem_experiencia: '',
-    descricao_experiencia: '',
-    motivacao: '',
-    perfil_socio: '',
-    aceita_processos: ''
+  // --- 2. RECUPERA OS DADOS SALVOS (OU COMEÇA VAZIO) ---
+  const [formData, setFormData] = useState(() => {
+    const savedData = localStorage.getItem('form_fcmotos_data');
+    return savedData ? JSON.parse(savedData) : {
+        nome: '',
+        cidade_bairro: '',
+        idade: '',
+        instagram: '',
+        tem_outros_negocios: '',
+        quais_negocios: '',
+        atuacao_negocio: '',
+        valor_investimento: '',
+        restricao_cpf: '',
+        disponivel_contrato: '',
+        tem_experiencia: '',
+        descricao_experiencia: '',
+        motivacao: '',
+        perfil_socio: '',
+        aceita_processos: ''
+    };
   });
+
+  // --- 3. EFEITO MÁGICO: SALVA TUDO A CADA MUDANÇA ---
+  useEffect(() => {
+    localStorage.setItem('form_fcmotos_step', step);
+    localStorage.setItem('form_fcmotos_data', JSON.stringify(formData));
+  }, [step, formData]);
+
 
   const questions = [
     { type: 'text', field: 'nome', label: '1. Nome completo:' },
@@ -140,6 +156,11 @@ export default function Formulario() {
     try {
       const apiUrl = `${import.meta.env.VITE_API_URL}/api/candidatos`; 
       await axios.post(apiUrl, formData);
+      
+      // --- 4. LIMPEZA: SUCESSO! LIMPA A MEMÓRIA PARA O PRÓXIMO ---
+      localStorage.removeItem('form_fcmotos_step');
+      localStorage.removeItem('form_fcmotos_data');
+      
       setEnviado(true);
     } catch (error) {
       console.error(error);
