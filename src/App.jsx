@@ -11,7 +11,7 @@ function Home() {
     <div className="w-full max-w-5xl flex flex-col items-center animate-fade-in">
       
 <h1 className="text-3xl md:text-6xl font-extrabold text-center mb-10 leading-tight">
-  SEJA MEU SÓCIO EM UMA NOVA UNIDADE DA <span className="text-orange-600 block md:inline">FC MOTOS</span>
+  SEJA MEU SÓCIO EM UMA NOVA UNIDADE DA <span className="text-orange-600 whitespace-nowrap">FC MOTOS</span>
 </h1>
 
       {/* Grid de Estatísticas */}
