@@ -1,11 +1,11 @@
-# Configura o ambiente com Node 20
+# Força o uso do Node.js (impede que ele use o Caddy padrão na raiz)
+providers = ["node"]
+
 [phases.setup]
 nixPkgs = ["nodejs_20", "npm-9_x"]
 
-# Instala (automático) e constrói o site
 [phases.build]
 cmds = ["npm run build"]
 
-# Inicia o servidor estático na pasta dist
 [start]
 cmd = "npx serve -s dist -l 80"
