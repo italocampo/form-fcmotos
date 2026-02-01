@@ -6,23 +6,48 @@ export default function Dashboard() {
   const [senha, setSenha] = useState("");
   const [autorizado, setAutorizado] = useState(false);
 
-  // Pega a URL da API do ambiente ou usa a fixa se necessário
   const API_URL = import.meta.env.VITE_API_URL;
+
+  // Função para buscar os dados
+  const buscarDados = () => {
+    fetch(`${API_URL}/api/candidatos`)
+      .then(res => res.json())
+      .then(data => {
+        setCadastros(data);
+        setLoading(false);
+      })
+      .catch(err => console.error("Erro ao buscar:", err));
+  };
 
   useEffect(() => {
     if (autorizado) {
-      // Busca na rota nova que criamos: /api/candidatos
-      fetch(`${API_URL}/api/candidatos`)
-        .then(res => res.json())
-        .then(data => {
-          setCadastros(data);
-          setLoading(false);
-        })
-        .catch(err => console.error("Erro ao buscar:", err));
+      buscarDados();
     }
   }, [autorizado, API_URL]);
 
-  // TELA DE LOGIN SIMPLES
+  // --- NOVA FUNÇÃO DE DELETAR ---
+  const handleDelete = async (id) => {
+    // Pergunta de segurança para não apagar sem querer
+    if (window.confirm("⚠️ Tem certeza que deseja EXCLUIR este cadastro? Essa ação não tem volta.")) {
+      try {
+        const response = await fetch(`${API_URL}/api/candidatos/${id}`, {
+          method: 'DELETE',
+        });
+
+        if (response.ok) {
+          // Remove o item da tela instantaneamente sem precisar recarregar
+          setCadastros(cadastros.filter(item => item.id !== id));
+        } else {
+          alert("Erro ao tentar deletar no servidor.");
+        }
+      } catch (error) {
+        console.error("Erro:", error);
+        alert("Erro de conexão.");
+      }
+    }
+  };
+
+  // TELA DE LOGIN
   if (!autorizado) {
     return (
       <div className="min-h-screen bg-[#0e0e0e] flex flex-col items-center justify-center p-4 font-sans">
@@ -35,7 +60,7 @@ export default function Dashboard() {
             onChange={(e) => setSenha(e.target.value)}
           />
           <button 
-            onClick={() => senha === "fc2026" && setAutorizado(true)} // SENHA: fc2026 (Pode mudar aqui)
+            onClick={() => senha === "fc2026" && setAutorizado(true)}
             className="w-full bg-orange-600 hover:bg-orange-500 py-3 rounded text-white font-bold transition-transform active:scale-95"
           >
             Entrar no Painel
@@ -61,10 +86,19 @@ export default function Dashboard() {
 
         <div className="grid gap-6">
           {cadastros.map((item) => (
-            <div key={item.id} className="bg-gray-900 rounded-xl p-6 border border-gray-800 shadow-lg hover:border-orange-500/30 transition-all">
+            <div key={item.id} className="relative bg-gray-900 rounded-xl p-6 border border-gray-800 shadow-lg hover:border-orange-500/30 transition-all group">
               
+              {/* --- BOTÃO DE DELETAR (NOVO) --- */}
+              <button 
+                onClick={() => handleDelete(item.id)}
+                className="absolute top-4 right-4 bg-gray-800 hover:bg-red-600 text-gray-400 hover:text-white p-2 rounded-full transition-colors z-10"
+                title="Excluir cadastro"
+              >
+                🗑️
+              </button>
+
               {/* Cabeçalho do Card */}
-              <div className="flex flex-col md:flex-row justify-between mb-6 border-b border-gray-800 pb-4">
+              <div className="flex flex-col md:flex-row justify-between mb-6 border-b border-gray-800 pb-4 pr-12"> {/* pr-12 para dar espaço ao botão delete */}
                 <div>
                   <h2 className="text-2xl font-bold text-white mb-1">{item.nome}</h2>
                   <div className="flex items-center gap-2 text-gray-400 text-sm">
