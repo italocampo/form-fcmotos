@@ -24,7 +24,7 @@ function LumeFooter() {
         </a>
         <span className="text-gray-700 text-xs">·</span>
         <a
-          href="https://instagram.com/lumetecnologiabr"
+          href="https://instagram.com/lumetecnologia.br"
           target="_blank"
           rel="noopener noreferrer"
           className="flex items-center gap-1 text-gray-500 hover:text-gray-300 text-xs transition-colors"
